@@ -56,5 +56,17 @@ class elevator:
         stress = dP/A
         return stress
 
+    def get_mass_between(self, hl, hh):
+        mass = 0
+        dh = (hh - hl)/1000
+        for i in range(1000):
+            hi = hl + i * dh
+            A = self.get_A_at(hi)
+            V = dh * A
+            dm = V * self.mtl.get_density()
+            mass += dm
+
+        return mass
+
     def get_tan_vel_at(self, h):
         return self.body.get_tan_vel_at(h)

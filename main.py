@@ -28,6 +28,11 @@ def linear_profile(h):
     A = pi * y**2
     return A
 
+def constant_profile(h):
+    y = w_min
+    A = pi * y**2
+    return A
+
 def main():
     SS = SS304L()
     
@@ -43,12 +48,16 @@ def main():
     stresses = []
     gravitys = []
     inertials = []
+    total_forces = []
+    total_accels = []
     for h in range(0, int(h_elev), 100000):
         hs.append(h/1000)
         ys.append((Atlantic_Lift.A(h)/pi)**(0.5)/1000)
         stresses.append(Atlantic_Lift.get_stress_at(h)/10**9)
         gravitys.append(Atlantic_Lift.get_gravitational_pull(h-100000, h)/10**9)
         inertials.append(Atlantic_Lift.get_inertial_pull(h-100000, h)/10**9)
+        total_forces.append((Atlantic_Lift.get_inertial_pull(h-100000, h) - Atlantic_Lift.get_gravitational_pull(h-100000, h))/10**9)
+        total_accels.append((Atlantic_Lift.get_inertial_pull(h-100000, h) - Atlantic_Lift.get_gravitational_pull(h-100000, h)) / Atlantic_Lift.get_mass_between(h-100000, h))
 
     _, ax = plt.subplots()
     plt.plot(ys, hs)
@@ -73,6 +82,18 @@ def main():
     plt.grid()
     plt.xlabel("Tower Position (km)")
     plt.ylabel("Inertia-induced Force About Position (GN)")
+    plt.show()
+
+    plt.plot(hs, total_forces)
+    plt.grid()
+    plt.xlabel("Tower Position (km)")
+    plt.ylabel("Net Force About Position (GN)")
+    plt.show()
+
+    plt.plot(hs, total_accels)
+    plt.grid()
+    plt.xlabel("Tower Position (km)")
+    plt.ylabel("Net Acceleration About Position (GN)")
     plt.show()
 
 main()
