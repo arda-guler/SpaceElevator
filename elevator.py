@@ -50,10 +50,8 @@ class elevator:
 
     def get_stress_at(self, h):
         A = self.get_A_at(h)
-        P_below = -self.get_gravitational_pull(0, h) + self.get_inertial_pull(0, h)
-        P_above = -self.get_gravitational_pull(h, self.h) + self.get_inertial_pull(h, self.h)
-        dP = P_above - P_below
-        stress = dP/A
+        P = -self.get_gravitational_pull(h, self.h) + self.get_inertial_pull(h, self.h)
+        stress = P/A
         return stress
 
     def get_mass_between(self, hl, hh):
